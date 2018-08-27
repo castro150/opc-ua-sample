@@ -65,8 +65,26 @@ async.series([
             callback(err);
         });
     },
+
+    // step 5: finding the nodeId of a node by Browse name
+    function(callback) {
+        const browsePath = [
+            opcua.makeBrowsePath('RootFolder', '/Objects/Server.ServerStatus.BuildInfo.ProductName'),
+        ];
+        
+        let productNameNodeId;
+        the_session.translateBrowsePath(browsePath, function (err, results) {
+            if (!err) {
+                console.log(results);
+                console.log('>>>>>><<<<<<');
+                productNameNodeId = results[0].targets[0].targetId;
+                console.log(productNameNodeId);
+            }
+            callback(err);
+        });
+    },
     
-    // step 5: install a subscription and install a monitored item for 10 seconds
+    // step 6: install a subscription and install a monitored item for 10 seconds
     function(callback) {
         the_subscription=new opcua.ClientSubscription(the_session, {
             requestedPublishingInterval: 1000,
@@ -105,24 +123,6 @@ async.series([
         
         monitoredItem.on('changed', function(dataValue) {
            console.log(' % free mem = ', dataValue.value.value);
-        });
-    },
-
-    // step 6: finding the nodeId of a node by Browse name
-    function(callback) {
-        const browsePath = [
-            opcua.makeBrowsePath('RootFolder', '/Objects/Server.ServerStatus.BuildInfo.ProductName'),
-        ];
-        
-        let productNameNodeId;
-        the_session.translateBrowsePath(browsePath, function (err, results) {
-            if (!err) {
-                console.log(results);
-                console.log('>>>>>><<<<<<');
-                productNameNodeId = results[0].targets[0].targetId;
-                console.log(productNameNodeId);
-            }
-            callback(err);
         });
     },
 
