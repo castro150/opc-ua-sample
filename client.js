@@ -69,7 +69,7 @@ async.series([
     // step 5: finding the nodeId of a node by Browse name
     function(callback) {
         const browsePath = [
-            opcua.makeBrowsePath('RootFolder', '/Objects/Server.ServerStatus.BuildInfo.ProductName'),
+            opcua.makeBrowsePath('RootFolder', '/Objects/1:Device.1:Variable2'),
         ];
         
         let productNameNodeId;
@@ -79,6 +79,8 @@ async.series([
                 console.log('>>>>>><<<<<<');
                 productNameNodeId = results[0].targets[0].targetId;
                 console.log(productNameNodeId);
+                console.log(productNameNodeId.value);
+                console.log(productNameNodeId.namespace);
             }
             callback(err);
         });
